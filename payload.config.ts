@@ -1,5 +1,5 @@
 import path from 'path'
-// import { postgresAdapter } from '@payloadcms/db-postgres'
+import { postgresAdapter } from '@payloadcms/db-postgres'
 import { en } from 'payload/i18n/en'
 import {
   AlignFeature,
@@ -23,6 +23,7 @@ import {
 import { mongooseAdapter } from '@payloadcms/db-mongodb'
 import { buildConfig } from 'payload'
 import sharp from 'sharp'
+import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 import { fileURLToPath } from 'url'
 
 const filename = fileURLToPath(import.meta.url)
@@ -72,15 +73,21 @@ export default buildConfig({
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
-  // db: postgresAdapter({
-  //   pool: {
-  //     connectionString: process.env.POSTGRES_URI || ''
-  //   }
-  // }),
-  db: mongooseAdapter({
-    url: process.env.MONGODB_URI || '',
+  db: postgresAdapter({
+    pool: {
+      connectionString: process.env.POSTGRES_URI || '',
+    },
   }),
-
+  plugins: process.env.BLOB_READ_WRITE_TOKEN
+    ? [
+        vercelBlobStorage({
+          collections: {
+            media: true,
+          },
+          token: process.env.BLOB_READ_WRITE_TOKEN || '',
+        }),
+      ]
+    : [],
   /**
    * Payload can now accept specific translations from 'payload/i18n/en'
    * This is completely optional and will default to English if not provided

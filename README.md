@@ -1,5 +1,9 @@
 # Payload 3.0 Beta Demo
 
+### Quick Start
+
+[![Deploy with Vercel](https://vercel.com/new/clone?repository-url=https://github.com/charlieInCode/payload-nextjs&project-name=payload-nextjs&env=PAYLOAD_SECRET&stores=[{"type":"postgres"},{"type":"blob"}])
+
 This repo showcases a demo of the Payload 3.0 Beta running completely within Next.js.
 
 > [!IMPORTANT]
